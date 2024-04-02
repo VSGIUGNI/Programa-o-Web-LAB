@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>A Web Page</title>
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        h1, h2 {
+            margin: 0;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+        }
+        th, td {
+            text-align: left;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        footer {
+            padding: 20px;
+            text-align: center;
+            background-color: #f0f0f0;
+            margin-top: 20px;
+        }
+        /* Modal CSS */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.4); /* Black with opacity */
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto; /* 5% from the top, centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; /* Could be more or less, depending on screen size */
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        /* Estilo para os botões */
+        .button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Olá Marcelo 👋</h1>
+        <div>
+            <button>Gerir perfil</button>
+            <button>Terminar sessão</button>
+        </div>
+    </header>
+    <section>
+        <h2>As minhas tarefas</h2>
+        <table id="taskTable">
+            <tr>
+                <th>Tarefa</th>
+                <th>Data</th>
+                <th>Estado</th>
+            </tr>
+            <!-- Linhas de tarefas serão adicionadas aqui dinamicamente -->
+        </table>
+        <!-- Botão para adicionar nova tarefa -->
+        <button onclick="openModal('newTaskModal')" class="button">+ Nova tarefa</button>
+
+        <!-- Modal para adicionar nova tarefa -->
+        <div id="newTaskModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('newTaskModal')">&times;</span>
+                <h2>Nova tarefa</h2>
+                <form id="newTaskForm">
+                    <label for="taskDescription">Descrição:</label><br>
+                    <textarea id="taskDescription" name="taskDescription" rows="4" cols="50" style="resize: vertical;"></textarea><br><br>
+                    <label for="taskDate">Data:</label><br>
+                    <input type="date" id="taskDate" name="taskDate"><br><br>
+                    <button type="submit" class="button">Adicionar</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal para editar tarefa -->
+        <div id="editTaskModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('editTaskModal')">&times;</span>
+                <h2>Editar tarefa</h2>
+                <form id="editTaskForm">
+                    <label for="editTaskDescription">Descrição:</label><br>
+                    <textarea id="editTaskDescription" name="editTaskDescription" rows="4" cols="50" style="resize: vertical;"></textarea><br><br>
+                    <label for="editTaskDate">Data:</label><br>
+                    <input type="date" id="editTaskDate" name="editTaskDate"><br><br>
+                    <button type="submit" class="button">Salvar</button>
+                    <button type="button" class="button" onclick="deleteTask()">Apagar</button>
+                </form>
+            </div>
+        </div
+      </section>
+      <footer>
+          <p>Copyright ©2024 - All rights reserved by...</p>
+      </footer>
+  
+      <!-- JavaScript -->
+      <script>
+          // Lista de tarefas
+          let tasks = [];
+  
+          // Função para abrir modal
+          function openModal(modalId) {
+              document.getElementById(modalId).style.display = "block";
+          }
+  
+          // Função para fechar modal
+          function closeModal(modalId) {
+              document.getElementById(modalId).style.display = "none";
+          }
+  
+          // Função para adicionar nova tarefa
+          function addTask() {
+              let description = document.getElementById("taskDescription").value;
+              let date = document.getElementById("taskDate").value;
+  
+              // Adiciona a nova tarefa ao array de tarefas
+              tasks.push({ description: description, date: date });
+  
+              // Atualiza a tabela de tarefas
+              updateTaskTable();
+  
+              // Fecha o modal
+              closeModal('newTaskModal');
+          }
+  
+          // Função para atualizar a tabela de tarefas
+          function updateTaskTable() {
+              let table = document.getElementById("taskTable");
+              table.innerHTML = `
+                  <tr>
+                      <th>Tarefa</th>
+                      <th>Data</th>
+                      <th>Estado</th>
+                  </tr>
+              `;
+  
+              // Adiciona cada tarefa como uma nova linha na tabela
+              tasks.forEach((task, index) => {
+                  let row = table.insertRow();
+                  let descriptionCell = row.insertCell(0);
+                  let dateCell = row.insertCell(1);
+                  let statusCell = row.insertCell(2);
+  
+                  descriptionCell.innerHTML = task.description;
+                  dateCell.innerHTML = task.date;
+                  statusCell.innerHTML = `<input type="checkbox" id="taskStatus${index}" name="taskStatus" value="Estado">`;
+              });
+          }
+  
+          // Adiciona um event listener para o formulário de nova tarefa
+          document.getElementById("newTaskForm").addEventListener("submit", function(event) {
+              event.preventDefault(); // Previne o comportamento padrão do formulário
+              addTask(); // Adiciona a nova tarefa
+          });
+  
+          // Adiciona um event listener para as linhas da tabela de tarefas
+          document.getElementById("taskTable").addEventListener("click", function(event) {
+              let rowIndex = event.target.parentNode.rowIndex;
+              openEditModal(rowIndex);
+          });
+  
+          // Função para abrir modal de edição de tarefa
+          function openEditModal(rowIndex) {
+              document.getElementById("editTaskDescription").value = tasks[rowIndex - 1].description;
+              document.getElementById("editTaskDate").value = tasks[rowIndex - 1].date;
+              openModal("editTaskModal");
+          }
+  
+          // Função para salvar edição de tarefa
+          function saveEditedTask() {
+              let rowIndex = event.target.parentNode.rowIndex;
+              tasks[rowIndex - 1].description = document.getElementById("editTaskDescription").value;
+              tasks[rowIndex - 1].date = document.getElementById("editTaskDate").value;
+              updateTaskTable();
+              closeModal("editTaskModal");
+          }
+  
+          // Função para apagar tarefa
+          function deleteTask() {
+              let rowIndex = event.target.parentNode.rowIndex;
+              tasks.splice(rowIndex - 1, 1);
+              updateTaskTable();
+              closeModal("editTaskModal");
+          }
+      </script>
+  </body>
+  </html>
+  
