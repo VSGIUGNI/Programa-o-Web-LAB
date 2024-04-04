@@ -1,0 +1,51 @@
+.container {
+    text-align: center;
+}
+
+.logo {
+    width: 200px;
+    height: 200px;
+}
+
+.button-group {
+    margin-top: 20px;
+}
+
+.button-container {
+    margin-top: 30px;
+}
+
+.button {
+    display: inline-block;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    color: #333;
+    font-size: 18px;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    margin: 0 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: #f0f0f0;
+}
+
+.forgot-password {
+    margin-top: 20px;
+    display: block;
+}
+
+/* Estilo para o rodapé */
+footer {
+    background-color: #333;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+    width: 100vw; /* Ocupar a largura total da janela */
+    position: fixed;
+    bottom: 0;
+}
